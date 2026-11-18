@@ -179,7 +179,9 @@ Self-hosted, latin subset, `font-display: swap`, 400 roman preloaded. Body uses 
 
 Mobile-first single column with a 1.25rem gutter (3rem top, 4rem bottom). From 40rem the gutter opens to 2.5rem and the top to 5rem. From 60rem the page becomes a two-column grid inside a 72rem container: a 22.5rem intro column and a fluid main column, gap `clamp(4rem, 8vw, 7.5rem)`, top 6rem. The intro pins (sticky, top 6rem) only when the window is also at least 44rem tall, so it never gets cut off.
 
-On a build page the layout drops to a single 46rem column: the intro shrinks to one line, the name at 19px semibold (a link home) with the link row and theme toggle beside it (wrapping under it on phones), and the bio is hidden. The page opens at the top. Going back restores the two-column home and the scroll position.
+On a build page the intro shrinks to one line across the full container: the name at 19px semibold (a link home) on the left, the link row and theme toggle on the right (wrapping under it on phones); the bio is hidden and the page opens at the top. From 60rem the build page is a two-column grid inside the same 72rem container: the story (back link, title, lede, done/next, sections, log) in a main column capped at 44rem, and the facts list in a 19rem column on the right, level with the title, sticky at 3rem from the top, label above value. Below 60rem it is a single 42rem column. Going back restores the two-column home and the scroll position.
+
+From 90rem wide the root font size grows fluidly (`clamp(100%, 0.4167vw + 10px, 125%)`: 16px at 1440px, 18px at 1920px, at most 20px), and because every size and width is in rem, the whole layout scales with it so large monitors are filled rather than showing a laptop-sized page.
 
 On phones under 40rem the intro reorders: first bio paragraph (the co-op ask), then the link row, then the rest of the bio, so the résumé is above the fold. Under 34rem, list statuses drop beneath the title, the facts list stacks label over value, and the parts table reflows into a grid with the "why" column under each part.
 

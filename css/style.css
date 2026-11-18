@@ -89,6 +89,12 @@ html {
   text-size-adjust: 100%;
   scrollbar-color: var(--rule) var(--paper);
 }
+/* Big monitors: everything (type, spacing, column widths, all in rem)
+   grows gently so the page fills the screen instead of staying laptop-sized:
+   16px at 1440px wide, 18px at 1920px, at most 20px. */
+@media (min-width: 90rem) {
+  html { font-size: clamp(100%, 0.4167vw + 10px, 125%); }
+}
 
 body {
   margin: 0;
@@ -381,10 +387,7 @@ a.item-name { text-decoration: none; }
 /* On a build page the intro shrinks to one quiet line: the name (a link
    home) with the links and theme toggle beside it. The bio and the
    two-column layout belong to the home page only. */
-.is-detail .page {
-  display: block;
-  max-width: 46rem;
-}
+.is-detail .page { display: block; }
 .is-detail .intro {
   position: static;
   display: flex;
@@ -409,6 +412,31 @@ a.item-name { text-decoration: none; }
 }
 
 #detail-view { max-width: 42rem; }
+
+/* Wide screens: the build page uses the full width. The story runs in the
+   main column; the facts (budget, firmware, frame…) sit in a column on the
+   right and stay in view while you read. */
+@media (min-width: 60rem) {
+  #detail-view {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 19rem;
+    column-gap: clamp(3rem, 6vw, 6rem);
+    align-items: start;
+  }
+  #detail-view > * { grid-column: 1; }
+  #detail-view > .facts {
+    grid-column: 2;
+    grid-row: 2 / span 40;          /* level with the title */
+    position: sticky;
+    top: 3rem;
+    margin-top: 0.5rem;
+    grid-template-columns: 1fr;     /* label above value in the narrow column */
+  }
+  #detail-view > .facts dt { padding-bottom: 0; border-bottom: 0; }
+  #detail-view > .facts dd { padding-top: 0.125rem; }
+  #detail-view > :not(.facts) { max-width: 44rem; }
+}
 @keyframes arrive {
   from { opacity: 0; transform: translateY(0.5rem); filter: blur(2px); }
   to   { opacity: 1; transform: none; filter: none; }
