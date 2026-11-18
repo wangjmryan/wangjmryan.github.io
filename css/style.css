@@ -378,6 +378,36 @@ a.item-name { text-decoration: none; }
 
 /* 7. Build page ----------------------------------------------------------- */
 
+/* On a build page the intro shrinks to one quiet line: the name (a link
+   home) with the links and theme toggle beside it. The bio and the
+   two-column layout belong to the home page only. */
+.is-detail .page {
+  display: block;
+  max-width: 46rem;
+}
+.is-detail .intro {
+  position: static;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  margin-bottom: 3rem;
+}
+.is-detail .name {
+  font-size: 1.1875rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.is-detail .bio,
+.is-detail .intro noscript { display: none; }
+.is-detail .links { margin-top: 0; order: 0; }
+.is-detail #main { margin-top: 0; }
+@media (min-width: 40rem) {
+  .is-detail .page { padding-top: 3rem; }
+}
+
 #detail-view { max-width: 42rem; }
 @keyframes arrive {
   from { opacity: 0; transform: translateY(0.5rem); filter: blur(2px); }

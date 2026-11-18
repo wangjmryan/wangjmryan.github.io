@@ -337,13 +337,10 @@
     home.hidden = true;
     detail.hidden = false;
     inDetail = true;
-    // On phones the detail starts below the intro; jump to it. On wide
-    // screens the intro sits beside it, so go to the top.
-    const wide = window.matchMedia("(min-width: 60rem)").matches;
-    const place = () => window.scrollTo(0, wide ? 0 : detail.getBoundingClientRect().top + window.scrollY - 24);
-    place();
-    // On first load the font may still be arriving, which moves things; place again once it has.
-    if (!wide && document.fonts && document.fonts.status !== "loaded") document.fonts.ready.then(() => { if (inDetail) place(); });
+    // Build pages use a compact one-line header (see .is-detail in
+    // style.css), so the page simply starts at the top.
+    document.documentElement.classList.add("is-detail");
+    window.scrollTo(0, 0);
     detail.querySelector("h1").focus({ preventScroll: true });
     setupReveal($("main"));
   }
@@ -356,6 +353,7 @@
     detail.hidden = true;
     detail.replaceChildren();
     setNameLevel("h1");
+    document.documentElement.classList.remove("is-detail");
     home.hidden = false;
     inDetail = false;
     document.title = homeTitle;

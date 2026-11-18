@@ -179,6 +179,8 @@ Self-hosted, latin subset, `font-display: swap`, 400 roman preloaded. Body uses 
 
 Mobile-first single column with a 1.25rem gutter (3rem top, 4rem bottom). From 40rem the gutter opens to 2.5rem and the top to 5rem. From 60rem the page becomes a two-column grid inside a 72rem container: a 22.5rem intro column and a fluid main column, gap `clamp(4rem, 8vw, 7.5rem)`, top 6rem. The intro pins (sticky, top 6rem) only when the window is also at least 44rem tall, so it never gets cut off.
 
+On a build page the layout drops to a single 46rem column: the intro shrinks to one line, the name at 19px semibold (a link home) with the link row and theme toggle beside it (wrapping under it on phones), and the bio is hidden. The page opens at the top. Going back restores the two-column home and the scroll position.
+
 On phones under 40rem the intro reorders: first bio paragraph (the co-op ask), then the link row, then the rest of the bio, so the résumé is above the fold. Under 34rem, list statuses drop beneath the title, the facts list stacks label over value, and the parts table reflows into a grid with the "why" column under each part.
 
 Rhythm: list rows 1rem vertical padding; fact and table rows 0.5 to 0.625rem; 0.75rem from a section label to its list; 3.5rem between groups; 3rem between build-page sections; 4rem before the footer. Reading measures are capped (bio 34rem, item notes 40rem, build page 42rem, lede 38rem).
