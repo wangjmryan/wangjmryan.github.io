@@ -203,6 +203,9 @@ main { outline: none; }
     scrollbar-color: var(--rule) transparent;
   }
   html:not(.is-detail) .intro { padding: 6rem calc(var(--gap) / 2) 4rem var(--g); }
+  /* The intro still scrolls (wheel, trackpad, keyboard) but shows no bar. */
+  html:not(.is-detail) .intro { scrollbar-width: none; }
+  html:not(.is-detail) .intro::-webkit-scrollbar { display: none; }
   html:not(.is-detail) main   { padding: 6.5rem var(--g) 5rem calc(var(--gap) / 2); }
   html:not(.is-detail) #main  { margin-top: 0; }
 }
@@ -717,6 +720,45 @@ a.item-name { text-decoration: none; }
 }
 
 
+/* Back to top (build pages): a quiet round button in the bottom-right
+   corner, paper-coloured with a hairline ring so it reads over text. It
+   slides up into view once you've scrolled down. */
+.to-top {
+  position: fixed;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.75rem);
+  transition: opacity 240ms var(--ease), transform 360ms var(--ease),
+              visibility 0s linear 360ms, color 160ms var(--ease), box-shadow 160ms var(--ease);
+}
+.to-top.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+.to-top:hover { color: var(--accent); box-shadow: inset 0 0 0 1px currentColor; }
+.to-top svg { transition: transform 240ms var(--ease); }
+.to-top:hover svg { transform: translateY(-2px); }
+@media (min-width: 60rem) {
+  .to-top { right: 2rem; bottom: 2rem; }
+}
+
+
 /* 9. Small things --------------------------------------------------------- */
 
 /* [PLACEHOLDER] text from data.js, highlighted until it's replaced. */
@@ -759,7 +801,7 @@ mark.ph {
     --paper: #FFFFFF; --ink: #000000; --muted: #5E5850; --rule: #D9D4CC;
     --accent: #A6402A; --mark: #F3E3D9; --select: #EBD3C7;
   }
-  .theme-toggle, .skip-link, .back { display: none; }
+  .theme-toggle, .skip-link, .back, .to-top { display: none; }
   html, body, .page, .intro, main { height: auto !important; overflow: visible !important; }
   .page { display: block; padding: 0 !important; }
   .intro, main { padding: 0 !important; }

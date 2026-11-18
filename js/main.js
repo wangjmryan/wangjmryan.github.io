@@ -352,6 +352,7 @@
     window.scrollTo(0, 0);
     detail.querySelector("h1").focus({ preventScroll: true });
     setupReveal($("main"));
+    syncToTop();
   }
 
   function showHome() {
@@ -363,6 +364,7 @@
     detail.replaceChildren();
     setNameLevel("h1");
     document.documentElement.classList.remove("is-detail");
+    syncToTop();
     home.hidden = false;
     inDetail = false;
     document.title = homeTitle;
@@ -454,6 +456,39 @@
   }
 
 
+  /* 7. Back to top ----------------------------------------------------------
+     On a build page, a small round button in the bottom-right corner
+     appears once you've scrolled down a little, and takes you back up. */
+
+  let syncToTop = () => {};   // set by setupToTop; called when the view changes
+
+  function setupToTop() {
+    const btn = h("button", { class: "to-top", type: "button", "aria-label": "Back to top", tabindex: "-1" });
+    btn.innerHTML = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" fill="none" ' +
+      'stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M10 16V4M4.5 9.5 10 4l5.5 5.5"/></svg>';
+    document.body.append(btn);
+
+    let shownNow = false;
+    function update() {
+      const show = inDetail && window.scrollY > Math.min(400, window.innerHeight * 0.5);
+      if (show === shownNow) return;
+      shownNow = show;
+      btn.classList.toggle("is-shown", show);
+      btn.tabIndex = show ? 0 : -1;          // only reachable by keyboard while visible
+      btn.setAttribute("aria-hidden", String(!show));
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    syncToTop = update;
+
+    btn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? "auto" : "smooth" });
+      const title = $("#detail-view h1");
+      if (title) title.focus({ preventScroll: true });   // keyboard users land at the top too
+    });
+  }
+
+
   /* Start ------------------------------------------------------------------ */
   if (typeof SITE === "undefined") {
     console.error("data.js didn't load, or has a syntax error. Check for a missing comma or quote.");
@@ -467,6 +502,7 @@
   renderSoftware();
   renderFooter();
   setupTheme();
+  setupToTop();
   window.addEventListener("hashchange", route);
   window.addEventListener("popstate", route);
 
