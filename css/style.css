@@ -525,29 +525,26 @@ a.item-name { text-decoration: none; }
 .item-link:hover .item-name,
 .item-link:focus-visible .item-name { background-size: 100% 1px; }
 
-/* Scroll-driven: each block rises out of a soft blur while it enters the
-   window, tied to the scroll position itself (no timers). Browsers without
-   scroll timelines simply show everything. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .group-title,
-    .items > .item,
-    .foot,
-    .d-goal,
-    .facts,
-    .d-section > h2,
-    .bullets li,
-    .decision,
-    .parts tbody tr,
-    .log li,
-    .gallery figure {
-      animation: rise linear both;
-      animation-timeline: view();
-      /* Fully in place 10rem after its top appears, however tall it is. */
-      animation-range: cover 0% cover 10rem;
-    }
+/* Scroll reveal: blocks below the fold wait slightly lowered, scaled and
+   blurred (.is-pending, set by main.js), and rise into place as they come
+   into view (.is-pending removed). It always finishes, even for the last
+   thing on the page. Without the script, nothing is ever hidden. */
+@media (prefers-reduced-motion: no-preference) {
+  .is-pending {
+    opacity: 0;
+    transform: translateY(1.75rem) scale(0.985);
+    filter: blur(4px);
+  }
+  .is-revealing {
+    transition: opacity 700ms var(--ease), transform 900ms var(--ease), filter 600ms var(--ease);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+}
 
-    /* Build pages: a hairline along the top fills with brick as you read. */
+/* Build pages: a line along the top fills with brick as you read. Tied to
+   the scroll position itself; browsers without scroll timelines skip it. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
     body:has(#detail-view:not([hidden]))::before {
       content: "";
       position: fixed;
@@ -560,11 +557,6 @@ a.item-name { text-decoration: none; }
       animation-timeline: scroll(root block);
     }
   }
-}
-@keyframes rise {
-  from { opacity: 0; transform: translateY(1.75rem) scale(0.985); filter: blur(4px); }
-  60%  { filter: none; }
-  to   { opacity: 1; transform: none; filter: none; }
 }
 @keyframes read-progress {
   from { transform: scaleX(0); }
@@ -596,7 +588,7 @@ a.item-name { text-decoration: none; }
   .settle .links,
   .settle .group-title,
   .settle .items > .item,
-  .settle .foot { animation: settle 600ms var(--ease) both; animation-timeline: auto; }
+  .settle .foot { animation: settle 600ms var(--ease) both; }
   .settle .bio p:nth-child(1) { animation-delay: 50ms; }
   .settle .bio p:nth-child(2) { animation-delay: 90ms; }
   .settle .bio p:nth-child(3) { animation-delay: 130ms; }
@@ -636,12 +628,8 @@ mark.ph {
 .skip-link:focus { top: 1rem; }
 .skip-link:hover { color: var(--paper); }
 
-.noscript {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 0 1.25rem 3rem;
-  color: var(--muted);
-}
+.noscript { margin-top: 1.5rem; max-width: 34rem; }
+.noscript p + p { margin-top: 1em; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -657,7 +645,6 @@ mark.ph {
     --paper: #FFFFFF; --ink: #000000; --muted: #5E5850; --rule: #D9D4CC;
     --accent: #A6402A; --mark: #F3E3D9; --select: #EBD3C7;
   }
-  body { background: #fff; color: #000; }
   .theme-toggle, .skip-link, .back { display: none; }
   .page { display: block; padding: 0; }
   .intro { position: static; }

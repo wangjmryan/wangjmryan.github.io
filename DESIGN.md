@@ -16,6 +16,10 @@ colors:
   accent-dark: "#E08A70"
   mark-dark: "#43302A"
   select-dark: "#5A3A30"
+  paper-print: "#FFFFFF"
+  ink-print: "#000000"
+  muted-print: "#5E5850"
+  rule-print: "#D9D4CC"
 typography:
   display:
     fontFamily: "Literata, Iowan Old Style, Palatino Linotype, Georgia, serif"
@@ -216,12 +220,12 @@ Back link (italic, muted), headline title, a meta line of status and dates, the 
 ### Motion
 One idea: the page moves with your scroll, not on its own. Every timed curve is ease-out-expo, `cubic-bezier(0.16, 1, 0.3, 1)`; nothing bounces or loops, and nothing travels between pages (a title-morph between list and build page was tried and removed).
 
-- **Scroll reveal (the focal motion).** Section labels, list rows, the footer, and on build pages the lede, facts, section headings, bullets, decisions, parts rows, log entries and gallery figures rise 1.75rem out of a 4px blur (and from 98.5% scale) as they scroll in. It is a CSS scroll-driven animation (`animation-timeline: view()`, range `cover 0%` to `cover 10rem`), so each block is fully in place 10rem after its top appears, however tall it is. Browsers without scroll timelines show everything as is.
+- **Scroll reveal (the focal motion).** Blocks that start below the window (section labels, list rows, the footer, and on build pages the lede, facts, section headings, bullets, decisions, parts rows, log entries and gallery figures) wait 1.75rem lower, at 98.5% scale and in a 4px blur, then rise into place when they come into view: opacity 700ms, transform 900ms, blur 600ms, ease-out-expo. Several arriving together go 70ms apart (capped at 5). An IntersectionObserver triggers it, so it always finishes, even for the last thing on the page, and works in every browser. Blocks already on screen are never hidden, and without the script nothing is hidden at all.
 - **Reading progress.** On build pages a fixed 2px brick line along the top edge fills from left to right with the page's scroll (`animation-timeline: scroll(root)`).
 - **Row hover.** The name turns brick in 160ms and its underline draws in over 360ms.
 - **First-visit settle.** On a first load of the home page only, the name, bio, links, section labels, list rows (35ms apart, capped at 8) and footer rise 0.375rem out of a 3px blur over 600ms, about 1s in total. It never replays when returning from a build page. Content is visible in CSS; the script only adds the effect.
 - **Opening a build.** The build page fades in (420ms, opacity, 0.5rem rise, 2px blur). Theme switching is a same-clock `plus-lighter` crossfade at 280ms, so nothing dims mid-way.
-- **Reduced motion.** Nothing reveals on scroll, there is no progress line and nothing settles; the theme switch becomes a 150ms crossfade, hover colour still changes, and the underline appears at once.
+- **Reduced motion.** Nothing waits to reveal on scroll, there is no progress line and nothing settles; the theme switch becomes a 150ms crossfade, hover colour still changes, and the underline appears at once.
 
 ## Do's and Don'ts
 

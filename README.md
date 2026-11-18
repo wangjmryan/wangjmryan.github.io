@@ -16,10 +16,18 @@ browser to see it; upload the folder to GitHub Pages to publish it.
 | `fonts/` | Literata, self-hosted (SIL Open Font License) | Never |
 | `tools/` | Templates for the link-preview image and home-screen icon | When your headline changes |
 
-Anything in `[SQUARE BRACKETS]` in `data.js` shows up **highlighted** on the
-page, so you can see what's unfinished. Remove the brackets and it turns
-normal. The one exception is a link: `[the words](https://the-url)` becomes a
-link instead.
+Anything in `[SQUARE BRACKETS]` in `data.js` is a placeholder. The one
+exception is a link: `[the words](https://the-url)` becomes a link instead.
+
+- **On your own computer** (opening `index.html`, or `localhost`),
+  placeholders show **highlighted** so you can see what's unfinished.
+- **On the published site** they're left out, so visitors never see brackets.
+  A bracketed note inside a sentence is removed. A line, part, decision or
+  gallery item that is all placeholder is skipped. A section with nothing
+  real left disappears, and so does a gallery with no real items (that's why
+  "3D-printed parts" isn't on the live site yet).
+- To see exactly what the live site will show, add `?published` to the
+  address on your computer, e.g. `index.html?published`.
 
 ## Common edits (all in `data.js`)
 

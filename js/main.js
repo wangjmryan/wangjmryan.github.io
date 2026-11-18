@@ -80,38 +80,123 @@
     return h("span", { class: "status" + (isActive(s) ? " is-active" : "") }, s);
   }
 
-  const plainName = () => SITE.name.replace(/\s*\[[^\]]+\]/g, "").trim() || SITE.name;
+  const plainName = () => DATA.name.replace(/\s*\[[^\]]+\]/g, "").trim() || DATA.name;
+
+
+  /* Unfinished content ----------------------------------------------------
+     On your own computer (or with ?preview in the URL), [PLACEHOLDERS] show
+     highlighted so you can see what's left to write. On the published site
+     they're left out: a bracketed note inside a sentence is removed, and a
+     line, part, decision or gallery item that is all placeholder is skipped.
+     A gallery with nothing real in it yet is hidden altogether. */
+
+  // ?published on your own computer shows exactly what the live site will.
+  const PREVIEW = !/[?&]published\b/.test(location.search) && (
+    location.protocol === "file:" ||
+    /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ||
+    /[?&]preview\b/.test(location.search));
+
+  const HAS_PH = /\[[^\]]+\](?!\()/;          // [words] not followed by (url)
+  const ALL_PH = /\[[^\]]+\](?!\()/g;
+
+  // The string with its placeholders taken out, or null if nothing real is left.
+  function clean(str) {
+    if (typeof str !== "string" || !HAS_PH.test(str)) return str;
+    const s = str.replace(ALL_PH, "")
+      .replace(/\s+([.,;:!?])/g, "$1")      // "link. ." → "link.."
+      .replace(/:([.!?]?)\s*$/, ".")          // "parts: ." → "parts."
+      .replace(/([.!?])[.]+/g, "$1")          // ".." → "."
+      .replace(/\(\s*\)/g, "")
+      .replace(/\s{2,}/g, " ")
+      .replace(/^[\s,.;:–—-]+/, "")
+      .trim();
+    return (s.match(/[A-Za-z0-9]/g) || []).length >= 3 ? s : null;
+  }
+  const lines = (arr) => (arr || []).map(clean).filter(Boolean);
+
+  function publishable(site) {
+    const s = JSON.parse(JSON.stringify(site));
+    s.bio = lines(s.bio);
+    s.builds = (s.builds || []).map((b) => {
+      b.hook = clean(b.hook);
+      b.goal = clean(b.goal);
+      b.status = clean(b.status);
+      b.facts = (b.facts || []).map((f) => ({ label: clean(f.label), value: clean(f.value) }))
+        .filter((f) => f.label && f.value);
+      ["done", "next", "constraints", "learning"].forEach((k) => { b[k] = lines(b[k]); });
+      b.decisions = (b.decisions || []).map((d) => ({ title: clean(d.title), body: clean(d.body) }))
+        .filter((d) => d.title && d.body);
+      b.parts = (b.parts || []).map((p) => Object.assign(p, { part: clean(p.part), why: clean(p.why) || "" }))
+        .filter((p) => p.part);
+      // A parts list with no prices and no reasons says nothing yet.
+      if (b.parts.every((p) => typeof p.cost !== "number" && !p.why)) b.parts = [];
+      b.items = (b.items || []).map((i) => Object.assign(i, { caption: clean(i.caption), purpose: clean(i.purpose) || "" }))
+        .filter((i) => i.caption);
+      b.log = (b.log || []).map((e) => Object.assign(e, { text: clean(e.text) })).filter((e) => e.text);
+      return b;
+    }).filter((b) => b.title && (b.type !== "gallery" || b.items.length > 0));
+    s.team = (s.team || []).map((t) => Object.assign(t, { name: clean(t.name), role: clean(t.role), points: lines(t.points) }))
+      .filter((t) => t.name);
+    s.software = (s.software || []).map((w) => Object.assign(w, { title: clean(w.title), hook: clean(w.hook) }))
+      .filter((w) => w.title);
+    return s;
+  }
+
+  let DATA = null;   // SITE as shown: as-is in preview, cleaned when published
 
 
   /* 2. Home view ---------------------------------------------------------- */
 
   function renderIntro() {
-    $("[data-bio]").replaceChildren(...SITE.bio.map((p) => h("p", null, p)));
+    $("[data-bio]").replaceChildren(...DATA.bio.map((p) => h("p", null, p)));
 
-    const L = SITE.links;
+    const L = DATA.links;
     const items = [
       L.resume && ["résumé", L.resume],
       L.email && ["email", "mailto:" + L.email],
       L.linkedin && ["linkedin", L.linkedin],
       L.github && ["github", L.github],
     ].filter(Boolean);
-    $("[data-links]").replaceChildren(...items.map(([label, href]) =>
-      h("li", null, isPlaceholder(href) ? h("span", null, label) : link(href, label))));
+    $("[data-links]").replaceChildren(...items.map(([label, href]) => {
+      if (isPlaceholder(href)) return h("li", null, h("span", null, label));
+      const a = link(href, label);
+      // Tell screen readers it's a PDF. It opens in the browser's viewer,
+      // which is what recruiters expect.
+      if (/\.pdf$/i.test(href)) {
+        a.append(h("span", { class: "sr-only" }, " (PDF)"));
+        a.setAttribute("type", "application/pdf");
+      }
+      return h("li", null, a);
+    }));
   }
 
   function renderBuilds() {
-    $("[data-builds]").replaceChildren(...SITE.builds.map((b) => h("li", { class: "item" },
+    $("[data-builds]").replaceChildren(...DATA.builds.map((b) => h("li", { class: "item" },
       h("a", { class: "item-link", href: "#build/" + b.slug },
         b.image && h("img", { class: "item-thumb", src: b.image, alt: "", width: 96, height: 96, loading: "lazy", decoding: "async" }),
         h("span", { class: "item-text" },
           h("span", { class: "item-name" }, b.title),
+          // Commas only screen readers hear, so the parts don't run together.
+          b.hook && h("span", { class: "sr-only" }, ", "),
           b.hook && h("span", { class: "item-desc" }, b.hook)),
+        b.status && h("span", { class: "sr-only" }, ", "),
         status(b.status))
     )));
   }
 
+  // One h1 per view: the name is the page's h1 on the lists, and becomes a
+  // plain paragraph on a build page, where the build's title is the h1.
+  function setNameLevel(level) {
+    const el = $(".name");
+    if (el.tagName.toLowerCase() === level) return;
+    const swap = document.createElement(level);
+    swap.className = el.className;
+    swap.append(...el.childNodes);
+    el.replaceWith(swap);
+  }
+
   function renderTeams() {
-    const team = SITE.team || [];
+    const team = DATA.team || [];
     $("[data-teams-section]").hidden = team.length === 0;
     $("[data-teams]").replaceChildren(...team.map((t) => h("li", { class: "item" },
       h("div", { class: "item-row" },
@@ -123,7 +208,7 @@
   }
 
   function renderSoftware() {
-    const list = SITE.software || [];
+    const list = DATA.software || [];
     $("[data-software-section]").hidden = list.length === 0;
     $("[data-software]").replaceChildren(...list.map((s) => h("li", { class: "item" },
       h(s.url ? "a" : "div", { class: s.url ? "item-link" : "item-row", href: s.url || null },
@@ -134,7 +219,7 @@
   }
 
   function renderFooter() {
-    $("[data-updated]").replaceChildren("Last updated ", time(SITE.updated), ".");
+    $("[data-updated]").replaceChildren("Last updated ", time(DATA.updated), ".");
   }
 
 
@@ -230,7 +315,7 @@
 
   function route() {
     const match = location.hash.match(/^#build\/([\w-]+)$/);
-    const build = match && SITE.builds.find((b) => b.slug === match[1]);
+    const build = match && DATA.builds.find((b) => b.slug === match[1]);
     const next = build ? build.slug : null;
     if (next === shown) return;            // hashchange and popstate can both fire
     if (build && !shown) homeScroll = window.scrollY;   // to restore on the way back
@@ -248,6 +333,7 @@
     const home = $("#home-view");
     const detail = $("#detail-view");
     renderDetail(build);
+    setNameLevel("p");
     home.hidden = true;
     detail.hidden = false;
     inDetail = true;
@@ -259,6 +345,7 @@
     // On first load the font may still be arriving, which moves things; place again once it has.
     if (!wide && document.fonts && document.fonts.status !== "loaded") document.fonts.ready.then(() => { if (inDetail) place(); });
     detail.querySelector("h1").focus({ preventScroll: true });
+    setupReveal($("main"));
   }
 
   function showHome() {
@@ -268,6 +355,7 @@
     document.documentElement.classList.remove("settle");   // never replay the first-visit settle
     detail.hidden = true;
     detail.replaceChildren();
+    setNameLevel("h1");
     home.hidden = false;
     inDetail = false;
     document.title = homeTitle;
@@ -324,11 +412,47 @@
   }
 
 
+  /* 6. Scroll reveal ---------------------------------------------------------
+     Blocks that start below the window wait slightly lowered and blurred,
+     then rise into place as they scroll into view. Blocks already on screen
+     are never hidden. Several arriving together go one after another. */
+
+  const REVEAL = ".group-title, .items > .item, .foot, .d-goal, .facts, .d-section > h2, " +
+    ".bullets li, .decision, .parts tbody tr, .log li, .gallery figure";
+
+  const revealer = ("IntersectionObserver" in window) && new IntersectionObserver((entries) => {
+    let n = 0;
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      revealer.unobserve(el);
+      el.style.setProperty("--reveal-delay", Math.min(n++, 5) * 70 + "ms");
+      el.classList.add("is-revealing");
+      el.classList.remove("is-pending");
+      el.addEventListener("transitionend", () => {
+        el.classList.remove("is-revealing");
+        el.style.removeProperty("--reveal-delay");
+      }, { once: true });
+    });
+  }, { rootMargin: "0px 0px -6% 0px" });
+
+  function setupReveal(scope) {
+    if (!revealer || reduceMotion.matches || !scope) return;
+    const fold = window.innerHeight;
+    scope.querySelectorAll(REVEAL).forEach((el) => {
+      if (el.getBoundingClientRect().top < fold) return;   // already visible: leave it be
+      el.classList.add("is-pending");
+      revealer.observe(el);
+    });
+  }
+
+
   /* Start ------------------------------------------------------------------ */
   if (typeof SITE === "undefined") {
     console.error("data.js didn't load, or has a syntax error. Check for a missing comma or quote.");
     return;
   }
+  DATA = PREVIEW ? SITE : publishable(SITE);
   homeTitle = document.title = plainName();
   renderIntro();
   renderBuilds();
@@ -347,4 +471,5 @@
     setTimeout(() => document.documentElement.classList.remove("settle"), 1200);
   }
   route();
+  if (!inDetail) setupReveal($("main"));
 })();

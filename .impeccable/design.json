@@ -213,6 +213,30 @@
           "#DDD1CD",
           "#F4F1F0"
         ]
+      },
+      "paper-print": {
+        "role": "neutral",
+        "displayName": "Print Paper",
+        "canonical": "#FFFFFF",
+        "tonalRamp": []
+      },
+      "ink-print": {
+        "role": "neutral",
+        "displayName": "Print Ink",
+        "canonical": "#000000",
+        "tonalRamp": []
+      },
+      "muted-print": {
+        "role": "neutral",
+        "displayName": "Print Grey",
+        "canonical": "#5E5850",
+        "tonalRamp": []
+      },
+      "rule-print": {
+        "role": "neutral",
+        "displayName": "Print Hairline",
+        "canonical": "#D9D4CC",
+        "tonalRamp": []
       }
     },
     "typographyMeta": {
@@ -303,8 +327,8 @@
       },
       {
         "name": "scroll-reveal",
-        "value": "animation-timeline: view(); range cover 0% to cover 10rem; 1.75rem rise, scale 0.985, blur(4px) to none",
-        "purpose": "The focal motion: blocks ease up into place as they scroll into view. Off under reduced motion; no-op without scroll timelines."
+        "value": "IntersectionObserver; from translateY(1.75rem) scale(0.985) blur(4px); opacity 700ms, transform 900ms, blur 600ms; 70ms apart, cap 5",
+        "purpose": "The focal motion: blocks below the window rise into place as they scroll into view. Always completes; off under reduced motion."
       },
       {
         "name": "read-progress",
