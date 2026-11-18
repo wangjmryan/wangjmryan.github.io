@@ -232,50 +232,14 @@
     const match = location.hash.match(/^#build\/([\w-]+)$/);
     const build = match && SITE.builds.find((b) => b.slug === match[1]);
     const next = build ? build.slug : null;
-    const first = !booted;
-    booted = true;
     if (next === shown) return;            // hashchange and popstate can both fire
-
-    // Opening or closing a build: the project's title
-    // travels between the list row and the page heading.
-    const rowOf = (slug) => $('.item-link[href="#build/' + slug + '"]');
-    const update = build ? () => showDetail(build) : () => showHome();
-    const from = build ? rowOf(next) : $("#detail-view");
-    const leaving = shown;
-    if (build && !leaving) homeScroll = window.scrollY;   // to restore on the way back
-    shown = next;            // set now: the transition runs its update later
-
-    if (first || !canTransition()) { update(); return; }
-
-    const travel = !reduceMotion.matches;   // reduced motion: a plain crossfade only
-    if (travel) name(from, true);
-    const html = document.documentElement;
-    html.classList.toggle("vt-back", !build);   // closing runs a little quicker
-    const vt = document.startViewTransition(() => {
-      name(from, false);
-      update();
-      if (travel) name(build ? $("#detail-view") : rowOf(leaving), true);
-    });
-    vt.ready.catch(() => {});  // a transition interrupted by a quicker click is fine
-    vt.finished.catch(() => {}).finally(() => {
-      html.classList.remove("vt-back");
-      $$("[style*='view-transition-name']").forEach((el) => el.style.viewTransitionName = "");
-    });
-  }
-  let booted = false;
-
-  // Give the title inside `root` the shared name the transition matches up.
-  // Only one element may hold the name at a time. (Only the title travels;
-  // everything else, the status included, crossfades.)
-  function name(root, on) {
-    if (!root) return;
-    const title = root.querySelector(".item-name, .d-title");
-    if (title) title.style.viewTransitionName = on ? "build-title" : "";
+    if (build && !shown) homeScroll = window.scrollY;   // to restore on the way back
+    shown = next;
+    if (build) showDetail(build); else showHome();
   }
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  // With reduced motion the browser still crossfades (see style.css) but
-  // nothing travels.
+  // Used for the theme switch's crossfade.
   function canTransition() {
     return typeof document.startViewTransition === "function" && !document.hidden;
   }

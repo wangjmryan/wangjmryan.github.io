@@ -289,7 +289,7 @@
       {
         "name": "ease",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Ease-out-expo; the only curve."
+        "purpose": "Ease-out-expo; the only timed curve."
       },
       {
         "name": "hover-color",
@@ -302,24 +302,29 @@
         "purpose": "Underline drawn under a list row's name on hover and focus."
       },
       {
-        "name": "title-travel",
-        "value": "520ms open, 420ms close; view-transition-name build-title",
-        "purpose": "The focal motion: the project title travels between its list row and the build page heading. Off under reduced motion."
+        "name": "scroll-reveal",
+        "value": "animation-timeline: view(); range cover 0% to cover 10rem; 1.75rem rise, scale 0.985, blur(4px) to none",
+        "purpose": "The focal motion: blocks ease up into place as they scroll into view. Off under reduced motion; no-op without scroll timelines."
       },
       {
-        "name": "page-crossfade",
-        "value": "320ms (theme 280ms, reduced motion 150ms); plus-lighter",
-        "purpose": "Same-clock additive crossfade for page and theme changes, so unchanged content never dims."
+        "name": "read-progress",
+        "value": "2px brick line, scaleX 0 to 1 on animation-timeline: scroll(root)",
+        "purpose": "Reading progress along the top of build pages."
+      },
+      {
+        "name": "arrive",
+        "value": "420ms; opacity, translateY(0.5rem), blur(2px)",
+        "purpose": "A build page appearing."
+      },
+      {
+        "name": "theme-crossfade",
+        "value": "280ms (reduced motion 150ms); plus-lighter",
+        "purpose": "Same-clock additive crossfade when switching theme."
       },
       {
         "name": "settle",
         "value": "600ms; 0.375rem rise, blur(3px) to none; rows 35ms apart, capped at 8",
         "purpose": "First visit to the home page only, about 1s total. Off under reduced motion."
-      },
-      {
-        "name": "arrive-fallback",
-        "value": "420ms; opacity, translateY(0.5rem), blur(2px)",
-        "purpose": "Build page arrival in browsers without View Transitions."
       }
     ],
     "breakpoints": [
@@ -400,12 +405,12 @@
       "Hairline rules between rows are the only lines on the page.",
       "Flat paper: no cards, no shadows, no badges, no fills behind content.",
       "One brick accent, held back for hover, the active-status dot, focus rings and the favicon.",
-      "One focal motion: a project's title travels from its list row into the build page heading, and back."
+      "Motion follows the scroll: blocks ease up into place as they come into view, and a build page shows reading progress."
     ],
     "rules": [
       {
         "name": "The Held-Back Brick Rule",
-        "body": "The accent appears only on hover, on the active-status dot, on focus rings and in the favicon. It never fills an area, never colours text at rest, never marks a heading. Its rarity is the point.",
+        "body": "The accent appears only on hover, on the active-status dot, on focus rings, in the favicon and as the 2px reading-progress line on build pages. It never fills an area, never colours text at rest, never marks a heading. Its rarity is the point.",
         "section": "colors"
       },
       {
@@ -432,11 +437,11 @@
     "dos": [
       "**Do** set everything in Literata 400, 400 italic or 600, with old-style figures in prose and lining tabular figures in tables.",
       "**Do** separate rows with 1px rules in the rule colour and nothing else.",
-      "**Do** keep the brick accent to hover, the active-status dot, focus rings and the favicon.",
+      "**Do** keep the brick accent to hover, the active-status dot, focus rings, the favicon and the reading-progress line.",
       "**Do** give every new colour a dark-mode twin under both `prefers-color-scheme: dark` and `[data-theme=\"dark\"]`.",
       "**Do** put descriptors, dates and statuses in italic muted grey, and names in semibold ink.",
       "**Do** leave Literata Italic's near-upright capitals and figures as they are.",
-      "**Do** keep the title travel as the one focal motion; anything new is a quiet supporting fade, never a second travelling object.",
+      "**Do** keep motion tied to scroll or to a direct action; nothing animates on a timer except the one-time first-visit settle.",
       "**Do** give every crossfade a matching clock and `plus-lighter` blending, and give every motion a reduced-motion path with no spatial movement."
     ],
     "donts": [

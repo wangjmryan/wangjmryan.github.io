@@ -10,7 +10,7 @@
      5. Intro: name, bio, links, theme toggle
      6. Lists: building, teams, software
      7. Build page
-     8. Motion: build title travel, row hover, first-visit settle
+     8. Motion: scroll reveals, reading progress, row hover, first-visit settle
      9. Small things: placeholders, skip link, reduced motion, print
    ========================================================================== */
 
@@ -349,9 +349,6 @@ a.item-name { text-decoration: none; }
 /* 7. Build page ----------------------------------------------------------- */
 
 #detail-view { max-width: 42rem; }
-@media (prefers-reduced-motion: no-preference) {
-  #detail-view:not([hidden]) { animation: arrive 420ms var(--ease) both; }
-}
 @keyframes arrive {
   from { opacity: 0; transform: translateY(0.5rem); filter: blur(2px); }
   to   { opacity: 1; transform: none; filter: none; }
@@ -513,14 +510,13 @@ a.item-name { text-decoration: none; }
 
 
 /* 8. Motion -------------------------------------------------------------
-   One idea: things you follow keep their place. Opening a build, its title
-   travels from the list row into the page heading, and back.
-   Rows answer hover with an underline drawn under the name. On a first
-   visit the page settles in once. Reduced motion: a plain crossfade. */
+   The page moves with your scroll: rows, sections and log entries ease up
+   into place as they come into view, and a build page shows how far through
+   it you are. Rows answer hover with an underline drawn under the name. On
+   a first visit the page settles in once. Reduced motion: none of it. */
 
-/* Titles hug their text so they can travel as one piece. */
+/* Names hug their text so the hover underline is as long as the name. */
 .item-name { align-self: flex-start; }
-.d-title { width: fit-content; }
 
 .item-link .item-name {
   background: linear-gradient(currentColor, currentColor) 0 calc(100% - 0.2em) / 0 1px no-repeat;
@@ -529,40 +525,69 @@ a.item-name { text-decoration: none; }
 .item-link:hover .item-name,
 .item-link:focus-visible .item-name { background-size: 100% 1px; }
 
-/* Page changes (build open/close, theme switch) crossfade; the build's title
-   travels between the list row and the page heading. Old and new fade on
-   the same clock and add up (plus-lighter), so anything that is the same in
-   both states, like the intro column, never dims. */
-::view-transition-old(root),
-::view-transition-new(root),
-::view-transition-old(build-title),
-::view-transition-new(build-title) { mix-blend-mode: plus-lighter; }
-::view-transition-old(root) { animation: vt-fade-out 320ms var(--ease) both; }
-::view-transition-new(root) { animation: vt-fade-in 320ms var(--ease) both; }
-::view-transition-group(build-title) { animation-duration: 520ms; animation-timing-function: var(--ease); }
-.vt-back::view-transition-group(build-title) { animation-duration: 420ms; }   /* exits are quicker */
-/* The title swaps its small and large renderings early, then travels as one. */
-::view-transition-old(build-title),
-::view-transition-new(build-title) { height: 100%; width: auto; }
-::view-transition-old(build-title) { animation: vt-fade-out 180ms var(--ease) both; }
-::view-transition-new(build-title) { animation: vt-fade-in 180ms var(--ease) both; }
-@keyframes vt-fade-out { to { opacity: 0; } }
-@keyframes vt-fade-in { from { opacity: 0; } }
+/* Scroll-driven: each block rises out of a soft blur while it enters the
+   window, tied to the scroll position itself (no timers). Browsers without
+   scroll timelines simply show everything. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .group-title,
+    .items > .item,
+    .foot,
+    .d-goal,
+    .facts,
+    .d-section > h2,
+    .bullets li,
+    .decision,
+    .parts tbody tr,
+    .log li,
+    .gallery figure {
+      animation: rise linear both;
+      animation-timeline: view();
+      /* Fully in place 10rem after its top appears, however tall it is. */
+      animation-range: cover 0% cover 10rem;
+    }
 
+    /* Build pages: a hairline along the top fills with brick as you read. */
+    body:has(#detail-view:not([hidden]))::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 5;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      animation: read-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(1.75rem) scale(0.985); filter: blur(4px); }
+  60%  { filter: none; }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+@keyframes read-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Opening a build page: a gentle arrival. */
+@media (prefers-reduced-motion: no-preference) {
+  #detail-view:not([hidden]) { animation: arrive 420ms var(--ease) both; }
+}
+
+/* Theme switch: old and new crossfade on one clock and add up (plus-lighter),
+   so nothing dims mid-way. */
+.theme-swap::view-transition-old(root),
+.theme-swap::view-transition-new(root) { mix-blend-mode: plus-lighter; }
 .theme-swap::view-transition-old(root) { animation: vt-fade-out 280ms ease both; }
 .theme-swap::view-transition-new(root) { animation: vt-fade-in 280ms ease both; }
-
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
   .theme-swap::view-transition-old(root) { animation: vt-fade-out 150ms ease both; }
-  ::view-transition-new(root),
   .theme-swap::view-transition-new(root) { animation: vt-fade-in 150ms ease both; }
 }
-
-/* Browsers that do page transitions use them; the rest get a gentle arrival. */
-@supports (view-transition-name: none) {
-  #detail-view:not([hidden]) { animation: none; }
-}
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
 
 /* First visit: intro, then each list, settle in (about 1s; removed after). */
 @media (prefers-reduced-motion: no-preference) {
@@ -571,7 +596,7 @@ a.item-name { text-decoration: none; }
   .settle .links,
   .settle .group-title,
   .settle .items > .item,
-  .settle .foot { animation: settle 600ms var(--ease) both; }
+  .settle .foot { animation: settle 600ms var(--ease) both; animation-timeline: auto; }
   .settle .bio p:nth-child(1) { animation-delay: 50ms; }
   .settle .bio p:nth-child(2) { animation-delay: 90ms; }
   .settle .bio p:nth-child(3) { animation-delay: 130ms; }

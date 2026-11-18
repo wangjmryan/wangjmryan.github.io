@@ -123,8 +123,8 @@ This direction replaces the rejected "engineering drawing / spec sheet" look. Co
 - Roman for prose, italic for descriptors, dates, statuses and the lowercase section headings, semibold only for names and headings.
 - Hairline rules between rows are the only lines on the page.
 - Flat paper: no cards, no shadows, no badges, no fills behind content.
-- One brick accent, held back for hover, the active-status dot, focus rings and the favicon.
-- One focal motion: a project's title travels from its list row into the build page heading, and back.
+- One brick accent, held back for hover, the active-status dot, focus rings, the favicon and the reading-progress line.
+- Motion follows the scroll: blocks ease up into place as they come into view, and a build page shows reading progress.
 
 ## Colors
 
@@ -144,7 +144,7 @@ A warm, low-chroma paper-and-ink palette with one brick accent; dark mode keeps 
 Print forces a light palette regardless of theme (white paper, black ink, muted #5E5850, rule #D9D4CC).
 
 ### Named Rules
-**The Held-Back Brick Rule.** The accent appears only on hover, on the active-status dot, on focus rings and in the favicon. It never fills an area, never colours text at rest, never marks a heading. Its rarity is the point.
+**The Held-Back Brick Rule.** The accent appears only on hover, on the active-status dot, on focus rings, in the favicon and as the 2px reading-progress line on build pages. It never fills an area, never colours text at rest, never marks a heading. Its rarity is the point.
 
 **The Same-Roles Dark Rule.** Dark mode swaps values, never roles. Every token has a dark twin and nothing appears or disappears between themes.
 
@@ -214,25 +214,25 @@ Back link (italic, muted), headline title, a meta line of status and dates, the 
 `[PLACEHOLDER]` text from data.js renders with the mark wash, roman (never italic), 2px radius, 0.15em side padding. It stays visible until the owner replaces the content.
 
 ### Motion
-One idea: things you follow keep their place. Every curve is ease-out-expo, `cubic-bezier(0.16, 1, 0.3, 1)`; nothing bounces or loops.
+One idea: the page moves with your scroll, not on its own. Every timed curve is ease-out-expo, `cubic-bezier(0.16, 1, 0.3, 1)`; nothing bounces or loops, and nothing travels between pages (a title-morph between list and build page was tried and removed).
 
-- **Title travel (the focal moment).** Opening a build from a list, a View Transition gives the row's project name and the build page's h1 one shared name (`build-title`); the title scales and moves into place over 520ms (420ms on the way back, since exits are quicker). Its small and large renderings swap in the first 180ms, then it travels as one piece. Only the title travels; the status and everything else crossfade.
-- **Page crossfade.** The rest of the page crossfades old to new on one 320ms clock with `mix-blend-mode: plus-lighter`, so content that is the same in both states (the intro column) never dims. Theme switching uses the same additive crossfade at 280ms.
+- **Scroll reveal (the focal motion).** Section labels, list rows, the footer, and on build pages the lede, facts, section headings, bullets, decisions, parts rows, log entries and gallery figures rise 1.75rem out of a 4px blur (and from 98.5% scale) as they scroll in. It is a CSS scroll-driven animation (`animation-timeline: view()`, range `cover 0%` to `cover 10rem`), so each block is fully in place 10rem after its top appears, however tall it is. Browsers without scroll timelines show everything as is.
+- **Reading progress.** On build pages a fixed 2px brick line along the top edge fills from left to right with the page's scroll (`animation-timeline: scroll(root)`).
 - **Row hover.** The name turns brick in 160ms and its underline draws in over 360ms.
 - **First-visit settle.** On a first load of the home page only, the name, bio, links, section labels, list rows (35ms apart, capped at 8) and footer rise 0.375rem out of a 3px blur over 600ms, about 1s in total. It never replays when returning from a build page. Content is visible in CSS; the script only adds the effect.
-- **Fallback.** Browsers without View Transitions instead fade the build page in (420ms, opacity, 0.5rem rise, 2px blur).
-- **Reduced motion.** Nothing travels and nothing settles: page changes and theme switches become a 150ms additive crossfade, hover colour still changes, and the underline appears at once.
+- **Opening a build.** The build page fades in (420ms, opacity, 0.5rem rise, 2px blur). Theme switching is a same-clock `plus-lighter` crossfade at 280ms, so nothing dims mid-way.
+- **Reduced motion.** Nothing reveals on scroll, there is no progress line and nothing settles; the theme switch becomes a 150ms crossfade, hover colour still changes, and the underline appears at once.
 
 ## Do's and Don'ts
 
 ### Do:
 - **Do** set everything in Literata 400, 400 italic or 600, with old-style figures in prose and lining tabular figures in tables.
 - **Do** separate rows with 1px rules in the rule colour and nothing else.
-- **Do** keep the brick accent to hover, the active-status dot, focus rings and the favicon.
+- **Do** keep the brick accent to hover, the active-status dot, focus rings, the favicon and the reading-progress line.
 - **Do** give every new colour a dark-mode twin under both `prefers-color-scheme: dark` and `[data-theme="dark"]`.
 - **Do** put descriptors, dates and statuses in italic muted grey, and names in semibold ink.
 - **Do** leave Literata Italic's near-upright capitals and figures as they are.
-- **Do** keep the title travel as the one focal motion; anything new is a quiet supporting fade, never a second travelling object.
+- **Do** keep motion tied to scroll or to a direct action; nothing animates on a timer except the one-time first-visit settle.
 - **Do** give every crossfade a matching clock and `plus-lighter` blending, and give every motion a reduced-motion path with no spatial movement.
 
 ### Don't:
