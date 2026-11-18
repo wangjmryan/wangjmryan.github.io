@@ -226,38 +226,89 @@
   let homeScroll = 0;      // where you were on the list before opening a build
   let inDetail = false;
 
+  let shown = null;        // slug of the build on screen, or null for the lists
+
   function route() {
     const match = location.hash.match(/^#build\/([\w-]+)$/);
     const build = match && SITE.builds.find((b) => b.slug === match[1]);
+    const next = build ? build.slug : null;
+    const first = !booted;
+    booted = true;
+    if (next === shown) return;            // hashchange and popstate can both fire
+
+    // Opening or closing a build: the project's title
+    // travels between the list row and the page heading.
+    const rowOf = (slug) => $('.item-link[href="#build/' + slug + '"]');
+    const update = build ? () => showDetail(build) : () => showHome();
+    const from = build ? rowOf(next) : $("#detail-view");
+    const leaving = shown;
+    if (build && !leaving) homeScroll = window.scrollY;   // to restore on the way back
+    shown = next;            // set now: the transition runs its update later
+
+    if (first || !canTransition()) { update(); return; }
+
+    const travel = !reduceMotion.matches;   // reduced motion: a plain crossfade only
+    if (travel) name(from, true);
+    const html = document.documentElement;
+    html.classList.toggle("vt-back", !build);   // closing runs a little quicker
+    const vt = document.startViewTransition(() => {
+      name(from, false);
+      update();
+      if (travel) name(build ? $("#detail-view") : rowOf(leaving), true);
+    });
+    vt.ready.catch(() => {});  // a transition interrupted by a quicker click is fine
+    vt.finished.catch(() => {}).finally(() => {
+      html.classList.remove("vt-back");
+      $$("[style*='view-transition-name']").forEach((el) => el.style.viewTransitionName = "");
+    });
+  }
+  let booted = false;
+
+  // Give the title inside `root` the shared name the transition matches up.
+  // Only one element may hold the name at a time. (Only the title travels;
+  // everything else, the status included, crossfades.)
+  function name(root, on) {
+    if (!root) return;
+    const title = root.querySelector(".item-name, .d-title");
+    if (title) title.style.viewTransitionName = on ? "build-title" : "";
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // With reduced motion the browser still crossfades (see style.css) but
+  // nothing travels.
+  function canTransition() {
+    return typeof document.startViewTransition === "function" && !document.hidden;
+  }
+
+  function showDetail(build) {
     const home = $("#home-view");
     const detail = $("#detail-view");
+    renderDetail(build);
+    home.hidden = true;
+    detail.hidden = false;
+    inDetail = true;
+    // On phones the detail starts below the intro; jump to it. On wide
+    // screens the intro sits beside it, so go to the top.
+    const wide = window.matchMedia("(min-width: 60rem)").matches;
+    const place = () => window.scrollTo(0, wide ? 0 : detail.getBoundingClientRect().top + window.scrollY - 24);
+    place();
+    // On first load the font may still be arriving, which moves things; place again once it has.
+    if (!wide && document.fonts && document.fonts.status !== "loaded") document.fonts.ready.then(() => { if (inDetail) place(); });
+    detail.querySelector("h1").focus({ preventScroll: true });
+  }
 
-    if (build) {
-      if (!inDetail) homeScroll = window.scrollY;
-      renderDetail(build);
-      home.hidden = true;
-      detail.hidden = false;
-      inDetail = true;
-      // On phones the detail starts below the intro; jump to it. On wide
-      // screens the intro sits beside it, so go to the top.
-      const wide = window.matchMedia("(min-width: 60rem)").matches;
-      const place = () => window.scrollTo(0, wide ? 0 : detail.getBoundingClientRect().top + window.scrollY - 24);
-      place();
-      // On first load the font may still be arriving, which moves things; place again once it has.
-      if (!wide && document.fonts && document.fonts.status !== "loaded") document.fonts.ready.then(() => { if (inDetail) place(); });
-      detail.querySelector("h1").focus({ preventScroll: true });
-      return;
-    }
-
-    if (inDetail) {
-      detail.hidden = true;
-      detail.replaceChildren();
-      home.hidden = false;
-      inDetail = false;
-      document.title = homeTitle;
-      window.scrollTo(0, homeScroll);
-      $(".name a").focus({ preventScroll: true });
-    }
+  function showHome() {
+    const home = $("#home-view");
+    const detail = $("#detail-view");
+    if (!inDetail) return;
+    document.documentElement.classList.remove("settle");   // never replay the first-visit settle
+    detail.hidden = true;
+    detail.replaceChildren();
+    home.hidden = false;
+    inDetail = false;
+    document.title = homeTitle;
+    window.scrollTo(0, homeScroll);
+    $(".name a").focus({ preventScroll: true });
   }
 
   // The name and the "all projects" link go home. Clear the hash with
@@ -290,9 +341,19 @@
 
     btn.addEventListener("click", () => {
       const next = current() === "dark" ? "light" : "dark";
-      document.documentElement.dataset.theme = next;
-      try { localStorage.setItem("theme", next); } catch (e) { /* private mode: fine */ }
-      sync();
+      const apply = () => {
+        document.documentElement.dataset.theme = next;
+        try { localStorage.setItem("theme", next); } catch (e) { /* private mode: fine */ }
+        sync();
+      };
+      // A soft crossfade between the two themes where the browser supports it.
+      if (canTransition()) {
+        document.documentElement.classList.add("theme-swap");
+        document.startViewTransition(apply).finished.finally(() =>
+          document.documentElement.classList.remove("theme-swap"));
+      } else {
+        apply();
+      }
     });
     media.addEventListener("change", sync);
     sync();
@@ -313,5 +374,13 @@
   setupTheme();
   window.addEventListener("hashchange", route);
   window.addEventListener("popstate", route);
+
+  // First visit: the intro, then the list rows, settle into place once.
+  // Removed afterwards so coming back from a build page doesn't replay it.
+  if (!location.hash.startsWith("#build/") && !reduceMotion.matches) {
+    $$(".items > .item").forEach((el, i) => el.style.setProperty("--i", Math.min(i, 8)));
+    document.documentElement.classList.add("settle");
+    setTimeout(() => document.documentElement.classList.remove("settle"), 1200);
+  }
   route();
 })();

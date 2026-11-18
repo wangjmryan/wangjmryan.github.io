@@ -124,7 +124,7 @@ This direction replaces the rejected "engineering drawing / spec sheet" look. Co
 - Hairline rules between rows are the only lines on the page.
 - Flat paper: no cards, no shadows, no badges, no fills behind content.
 - One brick accent, held back for hover, the active-status dot, focus rings and the favicon.
-- One motion: the build page arriving.
+- One focal motion: a project's title travels from its list row into the build page heading, and back.
 
 ## Colors
 
@@ -196,7 +196,7 @@ Square by default. The only rounding: 2px on focus rings and placeholder marks, 
 Ink text with a 1px underline at 35% ink, offset 0.22em. Hover turns text and underline brick over 160ms (ease-out-expo). Focus is a 2px brick outline, offset 3px. The link row in the intro adds 0.375rem block padding for tap size without changing how it looks. The name link drops the underline and does not change colour.
 
 ### List rows (building, teams, software)
-A baseline-aligned flex row, 1rem vertical padding, with a hairline above each row and one below the list. Left: item name (600) over an italic muted descriptor. Right: an italic muted status. An optional 3rem square thumbnail (3px radius) leads the row when a photo exists. When the row is a link, hovering turns only the name brick.
+A baseline-aligned flex row, 1rem vertical padding, with a hairline above each row and one below the list. Left: item name (600) over an italic muted descriptor. Right: an italic muted status. An optional 3rem square thumbnail (3px radius) leads the row when a photo exists. When the row is a link, hover (and keyboard focus) turns the name brick and draws a 1px underline under it from left to right; the row itself never moves.
 
 ### Status
 Italic, 15px, muted, no wrap. An in-progress status gets a 7px brick dot before it; finished, shelved, paused, idea and planning statuses do not. It is the only coloured element at rest on the home view.
@@ -214,7 +214,14 @@ Back link (italic, muted), headline title, a meta line of status and dates, the 
 `[PLACEHOLDER]` text from data.js renders with the mark wash, roman (never italic), 2px radius, 0.15em side padding. It stays visible until the owner replaces the content.
 
 ### Motion
-The single motion in the system: the build page arrives over 420ms with opacity 0 to 1, translateY 0.5rem to 0, and blur 2px to 0, eased `cubic-bezier(0.16, 1, 0.3, 1)`. Colour transitions on hover take 160ms on the same curve. Under `prefers-reduced-motion: reduce` animation is removed and transitions are effectively instant.
+One idea: things you follow keep their place. Every curve is ease-out-expo, `cubic-bezier(0.16, 1, 0.3, 1)`; nothing bounces or loops.
+
+- **Title travel (the focal moment).** Opening a build from a list, a View Transition gives the row's project name and the build page's h1 one shared name (`build-title`); the title scales and moves into place over 520ms (420ms on the way back, since exits are quicker). Its small and large renderings swap in the first 180ms, then it travels as one piece. Only the title travels; the status and everything else crossfade.
+- **Page crossfade.** The rest of the page crossfades old to new on one 320ms clock with `mix-blend-mode: plus-lighter`, so content that is the same in both states (the intro column) never dims. Theme switching uses the same additive crossfade at 280ms.
+- **Row hover.** The name turns brick in 160ms and its underline draws in over 360ms.
+- **First-visit settle.** On a first load of the home page only, the name, bio, links, section labels, list rows (35ms apart, capped at 8) and footer rise 0.375rem out of a 3px blur over 600ms, about 1s in total. It never replays when returning from a build page. Content is visible in CSS; the script only adds the effect.
+- **Fallback.** Browsers without View Transitions instead fade the build page in (420ms, opacity, 0.5rem rise, 2px blur).
+- **Reduced motion.** Nothing travels and nothing settles: page changes and theme switches become a 150ms additive crossfade, hover colour still changes, and the underline appears at once.
 
 ## Do's and Don'ts
 
@@ -225,7 +232,8 @@ The single motion in the system: the build page arrives over 420ms with opacity 
 - **Do** give every new colour a dark-mode twin under both `prefers-color-scheme: dark` and `[data-theme="dark"]`.
 - **Do** put descriptors, dates and statuses in italic muted grey, and names in semibold ink.
 - **Do** leave Literata Italic's near-upright capitals and figures as they are.
-- **Do** disable any new motion under reduced motion, and keep the build-page arrival as the only entrance animation.
+- **Do** keep the title travel as the one focal motion; anything new is a quiet supporting fade, never a second travelling object.
+- **Do** give every crossfade a matching clock and `plus-lighter` blending, and give every motion a reduced-motion path with no spatial movement.
 
 ### Don't:
 - **Don't** add cards, shadows, tinted panels, badges or skill chips.
