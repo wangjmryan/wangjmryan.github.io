@@ -236,9 +236,39 @@ main { outline: none; }
   transition: color 160ms var(--ease);
 }
 .theme-toggle:hover { color: var(--accent); }
-.theme-toggle .icon-moon { display: none; }
-.theme-toggle[aria-pressed="true"] .icon-sun { display: none; }
-.theme-toggle[aria-pressed="true"] .icon-moon { display: block; }
+/* One icon that morphs: in light mode a sun; switching to dark, its rays
+   pull in and it turns away while a crescent moon draws itself in; and the
+   reverse. (Reduced motion: it simply swaps.) */
+.theme-icon { overflow: visible; }
+.theme-icon .sun,
+.theme-icon .rays { transform-origin: 10px 10px; }
+.theme-icon .sun {
+  transition: transform 520ms var(--ease) 140ms, opacity 240ms ease 140ms;
+}
+.theme-icon .rays {
+  transition: transform 520ms var(--ease) 180ms, opacity 240ms ease 180ms;
+}
+.theme-icon .moon {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+  transition: stroke-dashoffset 360ms var(--ease), opacity 120ms ease 240ms;
+}
+.theme-toggle[aria-pressed="true"] .theme-icon .sun {
+  transform: rotate(-70deg) scale(0.4);
+  opacity: 0;
+  transition: transform 420ms var(--ease), opacity 200ms ease 120ms;
+}
+.theme-toggle[aria-pressed="true"] .theme-icon .rays {
+  transform: rotate(-45deg) scale(0.5);
+  opacity: 0;
+  transition: transform 360ms var(--ease), opacity 180ms ease;
+}
+.theme-toggle[aria-pressed="true"] .theme-icon .moon {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: stroke-dashoffset 620ms var(--ease) 180ms, opacity 120ms ease 180ms;
+}
 
 
 /* 6. Lists ---------------------------------------------------------------- */
@@ -568,13 +598,17 @@ a.item-name { text-decoration: none; }
   #detail-view:not([hidden]) { animation: arrive 420ms var(--ease) both; }
 }
 
-/* Theme switch: old and new crossfade on one clock and add up (plus-lighter),
+/* Theme switch: the new theme grows as a circle from the toggle button
+   (clip-path animated by main.js) over the old one, which holds still
+   underneath. Reduced motion: a quick crossfade that adds up (plus-lighter),
    so nothing dims mid-way. */
-.theme-swap::view-transition-old(root),
-.theme-swap::view-transition-new(root) { mix-blend-mode: plus-lighter; }
-.theme-swap::view-transition-old(root) { animation: vt-fade-out 280ms ease both; }
-.theme-swap::view-transition-new(root) { animation: vt-fade-in 280ms ease both; }
+.theme-circle::view-transition-old(root),
+.theme-circle::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.theme-circle::view-transition-old(root) { z-index: 1; }
+.theme-circle::view-transition-new(root) { z-index: 2; }
 @media (prefers-reduced-motion: reduce) {
+  .theme-swap::view-transition-old(root),
+  .theme-swap::view-transition-new(root) { mix-blend-mode: plus-lighter; }
   .theme-swap::view-transition-old(root) { animation: vt-fade-out 150ms ease both; }
   .theme-swap::view-transition-new(root) { animation: vt-fade-in 150ms ease both; }
 }

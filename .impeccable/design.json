@@ -341,14 +341,19 @@
         "purpose": "A build page appearing."
       },
       {
-        "name": "theme-crossfade",
-        "value": "280ms (reduced motion 150ms); plus-lighter",
-        "purpose": "Same-clock additive crossfade when switching theme."
-      },
-      {
         "name": "settle",
         "value": "600ms; 0.375rem rise, blur(3px) to none; rows 35ms apart, capped at 8",
         "purpose": "First visit to the home page only, about 1s total. Off under reduced motion."
+      },
+      {
+        "name": "theme-reveal",
+        "value": "View Transition clip-path circle from the toggle, 650ms cubic-bezier(0.65, 0, 0.35, 1); reduced motion 150ms plus-lighter crossfade",
+        "purpose": "Switching theme: the new theme spreads from the button over the old one."
+      },
+      {
+        "name": "theme-icon-morph",
+        "value": "sun rays scale/rotate out, crescent draws via stroke-dashoffset (~600ms), and reverse",
+        "purpose": "The toggle's icon changing between sun and moon."
       }
     ],
     "breakpoints": [
