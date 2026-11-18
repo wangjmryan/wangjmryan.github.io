@@ -1,0 +1,15 @@
+# Impeccable's local working files (sketches, review screenshots, caches).
+# PRODUCT.md, DESIGN.md, .impeccable/design.json and the surface brief are kept.
+.impeccable/sketches/
+.impeccable/questions/
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/hook.cache.json
+.impeccable/decision-payload.json
+.impeccable/brief-body.md
+.impeccable/config.local.json
+
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini

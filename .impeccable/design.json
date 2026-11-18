@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T20:30:03+00:00",
+  "title": "Design System: Ryan Wang",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#FAFAF8",
+        "tonalRamp": [
+          "#2A2A23",
+          "#4B4B3B",
+          "#6E6E53",
+          "#929269",
+          "#A9A98C",
+          "#C1C1AF",
+          "#D9D9D1",
+          "#F3F3F1"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Warm Paper (dark)",
+        "canonical": "#1B1916",
+        "tonalRamp": [
+          "#292724",
+          "#48443E",
+          "#696258",
+          "#8A8071",
+          "#A49D92",
+          "#BDB9B3",
+          "#D8D6D3",
+          "#F3F2F2"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Ink",
+        "canonical": "#211D19",
+        "tonalRamp": [
+          "#292623",
+          "#4A433D",
+          "#6C6155",
+          "#8F7E6C",
+          "#A79B8F",
+          "#BFB8B1",
+          "#D9D5D2",
+          "#F3F2F1"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Warm Ink (dark)",
+        "canonical": "#ECE6DD",
+        "tonalRamp": [
+          "#2D2820",
+          "#514636",
+          "#786549",
+          "#A1855A",
+          "#B4A082",
+          "#C7BBA9",
+          "#DCD7CE",
+          "#F4F3F1"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Stone Grey",
+        "canonical": "#6A635B",
+        "tonalRamp": [
+          "#282625",
+          "#474440",
+          "#67615A",
+          "#877E74",
+          "#A19B94",
+          "#BCB8B4",
+          "#D7D5D3",
+          "#F3F2F2"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Stone Grey (dark)",
+        "canonical": "#A69D92",
+        "tonalRamp": [
+          "#282624",
+          "#48443F",
+          "#696158",
+          "#8A7F71",
+          "#A49C92",
+          "#BDB8B3",
+          "#D8D5D3",
+          "#F3F2F2"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#E3DFD8",
+        "tonalRamp": [
+          "#2A2723",
+          "#4B463B",
+          "#6E6453",
+          "#928369",
+          "#A99F8C",
+          "#C1BAAF",
+          "#D9D6D1",
+          "#F3F3F1"
+        ]
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#34302A",
+        "tonalRamp": [
+          "#292724",
+          "#49443E",
+          "#696258",
+          "#8B8070",
+          "#A49D92",
+          "#BEB9B2",
+          "#D8D6D2",
+          "#F3F2F2"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Brick",
+        "canonical": "#A6402A",
+        "tonalRamp": [
+          "#331E19",
+          "#603127",
+          "#92412F",
+          "#C84E33",
+          "#CF7967",
+          "#D7A499",
+          "#E4CBC6",
+          "#F6F0EF"
+        ]
+      },
+      "accent-dark": {
+        "role": "primary",
+        "displayName": "Brick (dark)",
+        "canonical": "#E08A70",
+        "tonalRamp": [
+          "#351F18",
+          "#633324",
+          "#96442B",
+          "#CE532D",
+          "#D37D63",
+          "#DAA696",
+          "#E5CCC5",
+          "#F6F0EE"
+        ]
+      },
+      "mark": {
+        "role": "neutral",
+        "displayName": "Placeholder Wash",
+        "canonical": "#F3E3D9",
+        "tonalRamp": [
+          "#32241B",
+          "#5D3E2A",
+          "#8B5736",
+          "#BE6F3D",
+          "#C8906D",
+          "#D3B29D",
+          "#E2D2C8",
+          "#F5F2EF"
+        ]
+      },
+      "mark-dark": {
+        "role": "neutral",
+        "displayName": "Placeholder Wash (dark)",
+        "canonical": "#43302A",
+        "tonalRamp": [
+          "#2B2421",
+          "#4E3E38",
+          "#73574E",
+          "#9A6F61",
+          "#AF9087",
+          "#C4B2AC",
+          "#DBD2CF",
+          "#F4F2F1"
+        ]
+      },
+      "select": {
+        "role": "neutral",
+        "displayName": "Selection",
+        "canonical": "#EBD3C7",
+        "tonalRamp": [
+          "#31231C",
+          "#5A3C2C",
+          "#885439",
+          "#B96A43",
+          "#C48D71",
+          "#D1B09F",
+          "#E1D1C9",
+          "#F5F1EF"
+        ]
+      },
+      "select-dark": {
+        "role": "neutral",
+        "displayName": "Selection (dark)",
+        "canonical": "#5A3A30",
+        "tonalRamp": [
+          "#2D231F",
+          "#523C35",
+          "#7A5347",
+          "#A46A58",
+          "#B58D80",
+          "#C8B0A8",
+          "#DDD1CD",
+          "#F4F1F0"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Name",
+        "purpose": "The name, once, in the intro column."
+      },
+      "headline": {
+        "displayName": "Build Title",
+        "purpose": "A build page's title and the 404 heading."
+      },
+      "title": {
+        "displayName": "Section Heading",
+        "purpose": "Section headings inside a build page."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "The build page's goal sentence."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Bio prose and list text; old-style proportional figures."
+      },
+      "label": {
+        "displayName": "Section Label",
+        "purpose": "Lowercase italic muted section headings: building, teams, software."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Statuses, item notes, footer."
+      },
+      "table": {
+        "displayName": "Table",
+        "purpose": "Parts table; lining tabular figures."
+      }
+    },
+    "fonts": [
+      {
+        "family": "Literata",
+        "weight": 400,
+        "style": "normal",
+        "src": "fonts/literata-latin-400-normal.woff2"
+      },
+      {
+        "family": "Literata",
+        "weight": 400,
+        "style": "italic",
+        "src": "fonts/literata-latin-400-italic.woff2",
+        "note": "Capitals and figures are near-upright by design; do not fake an oblique or swap families."
+      },
+      {
+        "family": "Literata",
+        "weight": 600,
+        "style": "normal",
+        "src": "fonts/literata-latin-600-normal.woff2"
+      }
+    ],
+    "shadows": [],
+    "lines": [
+      {
+        "name": "hairline",
+        "value": "1px solid var(--rule)",
+        "purpose": "The only line: between rows of lists, facts, parts table and log."
+      }
+    ],
+    "focus": [
+      {
+        "name": "focus-ring",
+        "value": "outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px",
+        "purpose": "All keyboard focus."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Ease-out-expo; the only curve."
+      },
+      {
+        "name": "hover-color",
+        "value": "160ms",
+        "purpose": "Colour change on link, item-name and toggle hover."
+      },
+      {
+        "name": "arrive",
+        "value": "420ms; opacity 0 to 1, translateY(0.5rem) to none, blur(2px) to none",
+        "purpose": "The build page arriving; the system's one motion. Removed under prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-narrow",
+        "value": "max-width: 34rem"
+      },
+      {
+        "name": "tablet",
+        "value": "40rem"
+      },
+      {
+        "name": "two-column",
+        "value": "60rem"
+      },
+      {
+        "name": "sticky-intro",
+        "value": "min-width: 60rem and min-height: 44rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Text Link",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Inline link: ink with a 35% ink hairline underline, brick on hover, brick focus ring.",
+      "html": "<p class=\"ds-p\">Open the <a class=\"ds-link\" href=\"#\">résumé</a> or <a class=\"ds-link\" href=\"#\">email me</a>.</p>",
+      "css": ".ds-p{font-family:var(--serif,'Literata',Georgia,serif);font-size:17px;line-height:1.65;color:var(--ink,#211D19);margin:0}.ds-link{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,var(--ink,#211D19) 35%,transparent);text-underline-offset:.22em;transition:color 160ms cubic-bezier(.16,1,.3,1),text-decoration-color 160ms cubic-bezier(.16,1,.3,1)}.ds-link:hover{color:var(--accent,#A6402A);text-decoration-color:currentColor}.ds-link:focus-visible{outline:2px solid var(--accent,#A6402A);outline-offset:3px;border-radius:2px}"
+    },
+    {
+      "name": "Section Label + List",
+      "kind": "custom",
+      "refersTo": "list-row",
+      "description": "Lowercase italic section heading over hairline-ruled rows: semibold name, italic descriptor, italic status with the brick dot when active.",
+      "html": "<section class=\"ds-group\"><h2 class=\"ds-label\">building</h2><ul class=\"ds-items\"><li class=\"ds-item\"><a class=\"ds-row\" href=\"#\"><span class=\"ds-text\"><span class=\"ds-name\">Autonomous quadcopter</span><span class=\"ds-desc\">A small drone that drops a payload on its own.</span></span><span class=\"ds-status ds-active\">sourcing parts</span></a></li><li class=\"ds-item\"><div class=\"ds-row\"><span class=\"ds-text\"><span class=\"ds-name\">3D-printed parts</span><span class=\"ds-desc\">Brackets and mounts.</span></span><span class=\"ds-status\">paused</span></div></li></ul></section>",
+      "css": ".ds-group{font-family:var(--serif,'Literata',Georgia,serif);font-size:17px;line-height:1.65;color:var(--ink,#211D19)}.ds-label{font-size:1rem;line-height:1.5;font-weight:400;font-style:italic;color:var(--muted,#6A635B);margin:0 0 .75rem}.ds-items{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule,#E3DFD8)}.ds-item{border-top:1px solid var(--rule,#E3DFD8)}.ds-row{display:flex;align-items:baseline;gap:.75rem 1.5rem;padding:1rem 0;color:inherit;text-decoration:none}.ds-text{flex:1;min-width:0;display:flex;flex-direction:column;row-gap:.125rem}.ds-name{font-weight:600;transition:color 160ms cubic-bezier(.16,1,.3,1)}.ds-desc{font-style:italic;color:var(--muted,#6A635B)}a.ds-row:hover .ds-name{color:var(--accent,#A6402A)}a.ds-row:focus-visible{outline:2px solid var(--accent,#A6402A);outline-offset:3px;border-radius:2px}.ds-status{flex:none;font-size:.9375rem;font-style:italic;color:var(--muted,#6A635B);white-space:nowrap}.ds-active::before{content:'';display:inline-block;width:.4375rem;height:.4375rem;margin-right:.5rem;border-radius:50%;background:var(--accent,#A6402A);vertical-align:.12em}"
+    },
+    {
+      "name": "Theme Toggle",
+      "kind": "button",
+      "refersTo": "theme-toggle",
+      "description": "40px circular hit area with an 18px stroked sun icon; muted at rest, brick on hover.",
+      "html": "<button class=\"ds-toggle\" type=\"button\" aria-label=\"Dark mode\"><svg viewBox=\"0 0 20 20\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"10\" cy=\"10\" r=\"3.5\"/><path d=\"M10 1.5v2.2M10 16.3v2.2M1.5 10h2.2M16.3 10h2.2M4 4l1.6 1.6M14.4 14.4 16 16M4 16l1.6-1.6M14.4 5.6 16 4\"/></svg></button>",
+      "css": ".ds-toggle{display:inline-grid;place-items:center;width:2.5rem;height:2.5rem;padding:0;border:0;border-radius:50%;background:none;color:var(--muted,#6A635B);cursor:pointer;transition:color 160ms cubic-bezier(.16,1,.3,1)}.ds-toggle:hover{color:var(--accent,#A6402A)}.ds-toggle:focus-visible{outline:2px solid var(--accent,#A6402A);outline-offset:3px;border-radius:2px}"
+    },
+    {
+      "name": "Facts List",
+      "kind": "custom",
+      "refersTo": "list-row",
+      "description": "Build-page facts: italic muted labels beside values, hairline rows.",
+      "html": "<dl class=\"ds-facts\"><dt>Budget</dt><dd>about $150</dd><dt>Frame</dt><dd>F450</dd><dt>Flight software</dt><dd>INAV</dd></dl>",
+      "css": ".ds-facts{font-family:var(--serif,'Literata',Georgia,serif);font-size:17px;line-height:1.65;color:var(--ink,#211D19);display:grid;grid-template-columns:max-content 1fr;margin:0;border-top:1px solid var(--rule,#E3DFD8)}.ds-facts dt,.ds-facts dd{margin:0;padding:.625rem 0;border-bottom:1px solid var(--rule,#E3DFD8)}.ds-facts dt{padding-right:2rem;font-style:italic;color:var(--muted,#6A635B)}"
+    },
+    {
+      "name": "Placeholder Mark",
+      "kind": "chip",
+      "refersTo": "placeholder-mark",
+      "description": "Highlights [PLACEHOLDER] text from data.js until it is replaced.",
+      "html": "<p class=\"ds-p2\">Frame: <mark class=\"ds-ph\">[which frame and why]</mark></p>",
+      "css": ".ds-p2{font-family:var(--serif,'Literata',Georgia,serif);font-size:17px;line-height:1.65;color:var(--ink,#211D19);margin:0}.ds-ph{background:var(--mark,#F3E3D9);color:inherit;padding:0 .15em;border-radius:2px;font-style:normal}"
+    },
+    {
+      "name": "Skip Link",
+      "kind": "nav",
+      "refersTo": "skip-link",
+      "description": "Keyboard skip link: ink block with paper text, shown on focus.",
+      "html": "<a class=\"ds-skip\" href=\"#\">Skip to content</a>",
+      "css": ".ds-skip{font-family:var(--serif,'Literata',Georgia,serif);display:inline-block;padding:.5rem .875rem;background:var(--ink,#211D19);color:var(--paper,#FAFAF8);text-decoration:none;border-radius:3px}.ds-skip:focus-visible{outline:2px solid var(--accent,#A6402A);outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Person Writing Plainly",
+    "overview": "The site is the category standard played straight: a clean personal page where the prose and the work carry it, not a concept. One serif (Literata) set with care, warm near-black ink on near-white paper, one grey for everything secondary, and a single brick accent kept almost entirely in reserve. There is no themed world and no metaphor; the craft is in the typography, the spacing and the restraint.\n\nDensity is low and the reading is linear. On wide screens a sticky intro column (name, four short paragraphs, a quiet link row) sits beside a scrolling column of plain lists separated by hairline rules. On phones it collapses to one column, with the co-op ask and the résumé link above the fold. Build pages open in place of the list, as a single readable measure.\n\nThis direction replaces the rejected \"engineering drawing / spec sheet\" look. Confirmed rejections: costume spec sheets, mono labels, grid paper, part numbers and dimension lines, the Archivo + IBM Plex Mono pairing, and the portfolio template (hero banner, cards, skill badges).",
+    "keyCharacteristics": [
+      "One family, three cuts: Literata 400, 400 italic, 600. Nothing else.",
+      "Roman for prose, italic for descriptors, dates, statuses and the lowercase section headings, semibold only for names and headings.",
+      "Hairline rules between rows are the only lines on the page.",
+      "Flat paper: no cards, no shadows, no badges, no fills behind content.",
+      "One brick accent, held back for hover, the active-status dot, focus rings and the favicon.",
+      "One motion: the build page arriving."
+    ],
+    "rules": [
+      {
+        "name": "The Held-Back Brick Rule",
+        "body": "The accent appears only on hover, on the active-status dot, on focus rings and in the favicon. It never fills an area, never colours text at rest, never marks a heading. Its rarity is the point.",
+        "section": "colors"
+      },
+      {
+        "name": "The Same-Roles Dark Rule",
+        "body": "Dark mode swaps values, never roles. Every token has a dark twin and nothing appears or disappears between themes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Voices Rule",
+        "body": "Roman speaks, italic describes, semibold names. Italic carries descriptors, dates, statuses, fact labels, decision headings and the lowercase section headings; semibold is only for the name, item names, headings and the table total. No uppercase, no letter-spaced labels, no other weights.",
+        "section": "typography"
+      },
+      {
+        "name": "The Upright Italic Rule",
+        "body": "Literata Italic's capitals and figures are near-upright by design; only the lowercase slants strongly. This is the typeface, not a bug. Do not substitute a synthetic oblique, swap families, or add skew to \"fix\" it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline-Only Rule",
+        "body": "The only lines are 1px rules between rows of a list, facts table, parts table or log. No cards, no boxes, no badges, no dividers between sections.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** set everything in Literata 400, 400 italic or 600, with old-style figures in prose and lining tabular figures in tables.",
+      "**Do** separate rows with 1px rules in the rule colour and nothing else.",
+      "**Do** keep the brick accent to hover, the active-status dot, focus rings and the favicon.",
+      "**Do** give every new colour a dark-mode twin under both `prefers-color-scheme: dark` and `[data-theme=\"dark\"]`.",
+      "**Do** put descriptors, dates and statuses in italic muted grey, and names in semibold ink.",
+      "**Do** leave Literata Italic's near-upright capitals and figures as they are.",
+      "**Do** disable any new motion under reduced motion, and keep the build-page arrival as the only entrance animation."
+    ],
+    "donts": [
+      "**Don't** add cards, shadows, tinted panels, badges or skill chips.",
+      "**Don't** add a second typeface, a monospace face, uppercase or letter-spaced labels.",
+      "**Don't** bring back spec-sheet costume: grid paper, part numbers, dimension lines, technical-drawing frames.",
+      "**Don't** use the accent as a fill, a heading colour or for text at rest.",
+      "**Don't** add a hero banner or decorative imagery; images appear only as real build photos.",
+      "**Don't** use glyph or emoji icons; the theme toggle's stroked SVGs are the only icons."
+    ]
+  }
+}
