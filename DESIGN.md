@@ -209,7 +209,7 @@ Italic, 15px, muted, no wrap. An in-progress status gets a 7px brick dot before 
 Lowercase italic muted words ("building", "teams", "software") at 16px, real h2 elements. They are section headings, not eyebrows over a headline.
 
 ### Theme toggle
-A 40px circular hit area holding one 18px stroked icon (1.4px stroke, currentColor) that is a sun in light mode and morphs into a crescent moon in dark mode. Muted at rest, brick on hover. Sits at the end of the intro link row, and it is where the circular theme reveal starts.
+A 40px circular hit area holding one 18px stroked icon (1.4px stroke, currentColor) that is a sun in light mode and morphs into a crescent moon in dark mode. Muted at rest, brick on hover. Sits at the end of the intro link row.
 
 ### Build page
 Back link (italic, muted), headline title, a meta line of status and dates, the lede goal, a facts list (italic muted labels, hairline rows), title-level sections, dash bullets, italic decision headings, a parts table with lining tabular figures and a semibold total, a dated log (italic dates in a 10rem column from 40rem up), and an image gallery (4:3 tiles, 3px radius, 14rem minimum).
@@ -225,7 +225,7 @@ One idea: the page moves with your scroll, not on its own. Every timed curve is 
 - **Row hover.** The name turns brick in 160ms and its underline draws in over 360ms.
 - **First-visit settle.** On a first load of the home page only, the name, bio, links, section labels, list rows (35ms apart, capped at 8) and footer rise 0.375rem out of a 3px blur over 600ms, about 1s in total. It never replays when returning from a build page. Content is visible in CSS; the script only adds the effect.
 - **Opening a build.** The build page fades in (420ms, opacity, 0.5rem rise, 2px blur).
-- **Theme switch.** The new theme grows as a circle from the toggle button over the old one until it covers the window (View Transition, clip-path, 650ms, `cubic-bezier(0.65, 0, 0.35, 1)`). At the same time the toggle's icon morphs: going dark, the sun's rays pull in and it turns away while a crescent moon draws itself in (stroke-dashoffset, ~600ms); going light, the reverse. Browsers without View Transitions switch instantly, with the icon morph still playing.
+- **Theme switch.** The page crossfades between themes on one 280ms clock with `plus-lighter` blending, so nothing dims mid-way (a circle reveal from the button was tried and removed). The toggle's icon morphs: going dark, the sun's rays pull in and it turns away while a crescent moon draws itself in (stroke-dashoffset, ~600ms); going light, the reverse. Browsers without View Transitions switch instantly, with the icon morph still playing.
 - **Reduced motion.** Nothing waits to reveal on scroll, there is no progress line and nothing settles; the theme switch becomes a 150ms crossfade with the icon simply swapping, hover colour still changes, and the underline appears at once.
 
 ## Do's and Don'ts

@@ -400,24 +400,12 @@
       };
       if (!canTransition()) { apply(); return; }
 
-      // The new theme spreads out as a circle from the button until it
-      // covers the window. Reduced motion: a quick crossfade instead (CSS).
+      // A soft crossfade between the two themes (timing in style.css).
       const html = document.documentElement;
-      const r = btn.getBoundingClientRect();
-      const x = r.left + r.width / 2;
-      const y = r.top + r.height / 2;
-      const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
       html.classList.add("theme-swap");
-      if (!reduceMotion.matches) html.classList.add("theme-circle");
       const vt = document.startViewTransition(apply);
-      vt.ready.then(() => {
-        if (reduceMotion.matches) return;
-        html.animate(
-          { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + reach + "px at " + x + "px " + y + "px)"] },
-          { duration: 650, easing: "cubic-bezier(0.65, 0, 0.35, 1)", pseudoElement: "::view-transition-new(root)" }
-        );
-      }).catch(() => {});
-      vt.finished.catch(() => {}).finally(() => html.classList.remove("theme-swap", "theme-circle"));
+      vt.ready.catch(() => {});
+      vt.finished.catch(() => {}).finally(() => html.classList.remove("theme-swap"));
     });
     media.addEventListener("change", sync);
     sync();

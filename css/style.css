@@ -598,17 +598,13 @@ a.item-name { text-decoration: none; }
   #detail-view:not([hidden]) { animation: arrive 420ms var(--ease) both; }
 }
 
-/* Theme switch: the new theme grows as a circle from the toggle button
-   (clip-path animated by main.js) over the old one, which holds still
-   underneath. Reduced motion: a quick crossfade that adds up (plus-lighter),
+/* Theme switch: old and new crossfade on one clock and add up (plus-lighter),
    so nothing dims mid-way. */
-.theme-circle::view-transition-old(root),
-.theme-circle::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-.theme-circle::view-transition-old(root) { z-index: 1; }
-.theme-circle::view-transition-new(root) { z-index: 2; }
+.theme-swap::view-transition-old(root),
+.theme-swap::view-transition-new(root) { mix-blend-mode: plus-lighter; }
+.theme-swap::view-transition-old(root) { animation: vt-fade-out 280ms ease both; }
+.theme-swap::view-transition-new(root) { animation: vt-fade-in 280ms ease both; }
 @media (prefers-reduced-motion: reduce) {
-  .theme-swap::view-transition-old(root),
-  .theme-swap::view-transition-new(root) { mix-blend-mode: plus-lighter; }
   .theme-swap::view-transition-old(root) { animation: vt-fade-out 150ms ease both; }
   .theme-swap::view-transition-new(root) { animation: vt-fade-in 150ms ease both; }
 }
