@@ -309,6 +309,15 @@
 
   let homeTitle = document.title;
   let homeScroll = 0;      // where you were on the list before opening a build
+
+  // On wide screens the home page is two panels that scroll on their own
+  // (style.css "Split panels"); the lists' panel is <main>. Elsewhere the
+  // window scrolls. These read and set whichever is in use.
+  const split = () => window.matchMedia("(min-width: 60rem)").matches;
+  const listScroll = () => (split() ? $("main").scrollTop : window.scrollY);
+  function setListScroll(y) {
+    if (split()) $("main").scrollTop = y; else window.scrollTo(0, y);
+  }
   let inDetail = false;
 
   let shown = null;        // slug of the build on screen, or null for the lists
@@ -318,7 +327,7 @@
     const build = match && DATA.builds.find((b) => b.slug === match[1]);
     const next = build ? build.slug : null;
     if (next === shown) return;            // hashchange and popstate can both fire
-    if (build && !shown) homeScroll = window.scrollY;   // to restore on the way back
+    if (build && !shown) homeScroll = listScroll();   // to restore on the way back
     shown = next;
     if (build) showDetail(build); else showHome();
   }
@@ -357,7 +366,7 @@
     home.hidden = false;
     inDetail = false;
     document.title = homeTitle;
-    window.scrollTo(0, homeScroll);
+    setListScroll(homeScroll);
     $(".name a").focus({ preventScroll: true });
   }
 
@@ -368,7 +377,7 @@
     if (!a) return;
     e.preventDefault();
     if (location.hash) history.pushState(null, "", location.pathname + location.search);
-    if (inDetail) route(); else window.scrollTo({ top: 0 });
+    if (inDetail) route(); else { setListScroll(0); $(".intro").scrollTop = 0; }
   });
 
 

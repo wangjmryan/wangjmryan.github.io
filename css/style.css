@@ -149,8 +149,9 @@ a:hover {
 
 
 /* 4. Layout ---------------------------------------------------------------
-   Phones: one column, intro first. Wide screens: the intro sits in a left
-   column that stays put while the lists scroll beside it. */
+   Phones: one column, intro first. Wide screens (home page): two panels
+   that each scroll on their own, the intro on the left and the lists on
+   the right (see "Split panels" below). Build pages: one column. */
 
 .page {
   max-width: 72rem;
@@ -173,12 +174,37 @@ main { outline: none; }
     padding-top: 6rem;
   }
 }
-/* Only pin the intro when the window is tall enough to show all of it. */
-@media (min-width: 60rem) and (min-height: 44rem) {
-  .intro {
-    position: sticky;
-    top: 6rem;
+/* Split panels (home page, wide screens). The window itself doesn't scroll;
+   the intro and the lists are two full-height panels that each scroll on
+   their own. The panels run to the edges of the window (so the lists'
+   scrollbar sits at the far right), while their content lines up with the
+   centred 72rem column: --g is the side margin, --gap the space between. */
+@media (min-width: 60rem) {
+  html:not(.is-detail),
+  html:not(.is-detail) body { height: 100%; overflow: hidden; }
+
+  html:not(.is-detail) .page {
+    --g: max(2.5rem, (100vw - 72rem) / 2 + 2.5rem);
+    --gap: clamp(4rem, 8vw, 7.5rem);
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    grid-template-columns: calc(var(--g) + 22.5rem + var(--gap) / 2) minmax(0, 1fr);
+    column-gap: 0;
+    align-items: stretch;
   }
+  html:not(.is-detail) .intro,
+  html:not(.is-detail) main {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+  }
+  html:not(.is-detail) .intro { padding: 6rem calc(var(--gap) / 2) 4rem var(--g); }
+  html:not(.is-detail) main   { padding: 6.5rem var(--g) 5rem calc(var(--gap) / 2); }
+  html:not(.is-detail) #main  { margin-top: 0; }
 }
 
 
@@ -734,7 +760,9 @@ mark.ph {
     --accent: #A6402A; --mark: #F3E3D9; --select: #EBD3C7;
   }
   .theme-toggle, .skip-link, .back { display: none; }
-  .page { display: block; padding: 0; }
-  .intro { position: static; }
+  html, body, .page, .intro, main { height: auto !important; overflow: visible !important; }
+  .page { display: block; padding: 0 !important; }
+  .intro, main { padding: 0 !important; }
+  .intro { position: static; margin-bottom: 2rem; }
   a { text-decoration: none; }
 }
